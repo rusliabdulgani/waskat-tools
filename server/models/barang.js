@@ -14,8 +14,12 @@ let barangSchema = new Schema({
     required: true
   },
   pinjaman: {
-    type: String,
+    type: Number,
     required: true
+  },
+  _userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
   }
 })
 

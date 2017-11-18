@@ -5,12 +5,12 @@ const router = express.Router()
 const controller = require('../controllers/userController')
 const auth = require('../helper/auth')
 
-router.get('/', controller.getAllUsers)
-router.get('/:id', controller.getUserById)
+router.get('/', auth.adminOnly, controller.getAllUsers)
+router.get('/:id', auth.adminOnly, controller.getUserById)
 router.post('/signin', controller.signIn)
-router.post('/create-user', controller.createUser)
-router.put('/:id', controller.editUser)
-router.delete('/:id', controller.deleteUser)
+router.post('/create-user', auth.adminOnly, controller.createUser)
+router.put('/:id', auth.adminOnly, controller.editUser)
+router.delete('/:id', auth.adminOnly, controller.deleteUser)
 
 
 module.exports = router

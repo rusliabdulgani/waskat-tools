@@ -75,7 +75,8 @@ let signIn = (req, res) => {
         var token = jwt.sign({
           id: response.id, 
           username: response.username, 
-          email: response.email
+          email: response.email,
+          role: response.role
         }, process.env.SECRET_KEY)
       console.log('token: ', token)
       res.send({
