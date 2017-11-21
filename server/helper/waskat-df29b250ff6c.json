@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "waskat-186410",
+  "private_key_id": "df29b250ff6c5dac663237c376c74c381bde356a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCqSOyfOZdehgt+\nvgp62S7KKa8p8xemiphHka6Lbwa+6Yz+GaSDrGFfsTzaK4SCW9lyBuc+YSfdaLEc\nLqloS/OfhlPoW9iSCDS8ORIK047FaN4MC+xe7gMGGGxZ7nE8JTNxN2TxPzFjvogX\nXvUpCXad8ktxMl17Ys2RZd/65KqaptoZUa2GrCu1qwQ8oQh2S4OW1M3gdJd+n4R4\nLww27NdQG/xdzRWCswpQHYLRtHRnv+tuueGwGc3uZd4sacX6kO37yjP0oqvdhxW6\nPs1u5jzxj/48b1UxZaWZd80H9m2hweIVWRwjJoHrXyFVrYClGRUdB7Dxxsd1Esj5\nAidik/qLAgMBAAECggEAH5QVeXOrLAbMs+zXMa/7+tafGrbvgF18Xu1XwpjM1fOm\nx2qG9Tou9pl+MPFYCfqxiPFZydonk+o5ygGnPeWz4LX+8nyx3WbzLKKiw2o3NEm9\nv9soMvSNkABQe5751c8KSqkcqZZv+NDZGQhti3YrTqAjuHLAHkUU3S1Yy4TDVJlm\nGRuT7gcHvAa1GX2Nz/w5OV++p9mUfs3a+Shtis613bcxxKyU8297GTVPUBfn5EOd\niJ5wuhC7Sdl1NKUzp6W40btgSlLmaBCdhOJgDZzlZNyBe08qhVmxDv0/7O6kSNFl\ndxuDH6DuVTOONhiuDJWNR6TR4ZrSMCD6DMUjoyYuJQKBgQDbYeJldVhfaQj+ejK1\nOrmA6lgbR9vi5CQyGSALVQZ3mkR4HIYeP6kcqjjZVDRHprdDmVAaP8QTydLo/GH6\nnzpto6L3tE5sc4hv9y0qhNSWlboXaXXJWlTr/f/wu76A8MxTrvwZ45XOrXdZyaPX\nUr0MCSWh+PJAs7qd9P58Chy0vwKBgQDGtR/ers1EmsVH4qp/j5KIWoyZqjuIWcQc\n27TNu/13fjX6XO092LsTLg1YtlZEvgLQi5MDzsv47A3wKWWzjsn+0BumVdo1jo+o\n/BoCtpGc4pVYGV4A5v7leBMKPqmUrTdwKZ2TRS14D134hySGfKy77VLQHnIu9kZF\nPtzkhHYxNQKBgGhq0ZAK5zIaUy6USPhbaBnE8ISjkjQO9G9n6AmcwYRBx98HbIqP\nMFW1a3N9kZic8FNbcHXd7dyhTiKYpaXdDblLjnCpwD38S29HTZcUO/8kartj9a0N\nsqfUcHJLWeQTOJ2IBvPnj9EcXVc+Ex6UgehtnhzW2a8UHHm8NzggtAMPAoGAbpIT\nLeKvLmHBLYMfxOOrclyQqGFlxzXMPxKyxVi6bme4uZxEF4omb0HNA3RTBOWGw20n\nXZMRRW51QxKGGSh3lmdPO3vCdNLjdfDyuFfHJzmeSOu0t2PSqvXqAmVkD+tjUfKW\nUIDKEGjcrZLl7EAsDla9IjoO57r610VnvXFII5ECgYBwIPwq7i5gW3EPUtrPlE1C\n2m5t8UgEbpIApud0jjM7iWyrmjkWt4ruUUzgWcXGlhaWu4+6toaXQXdFlEIn/s3e\nInz15JiR/MS2o2us+phq+RvS6Y9pueT1sVD3copL28vc6uvvj3noAiU2yXO+I05f\n8qSyS/a4ZaF5Z1lzumnrWA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "waskat@waskat-186410.iam.gserviceaccount.com",
+  "client_id": "114848992940530785268",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/waskat%40waskat-186410.iam.gserviceaccount.com"
+}
