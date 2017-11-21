@@ -7,6 +7,7 @@ const mongoose = require('mongoose')
 const index = require('./routes/index')
 const user = require('./routes/users')
 const barang = require('./routes/barang')
+const upload = require('./routes/upload')
 
 const uri = `mongodb://rusligani:asdfgh123#@cluster0-shard-00-00-ntai3.mongodb.net:27017,cluster0-shard-00-01-ntai3.mongodb.net:27017,cluster0-shard-00-02-ntai3.mongodb.net:27017/waskatPegadaian?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin`
 
@@ -25,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/', index)
 app.use('/user', user)
 app.use('/barang', barang)
+app.use('/upload', upload)
 
 app.listen(process.env.PORT || 3000)
 
