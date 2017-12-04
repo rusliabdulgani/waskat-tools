@@ -2,24 +2,16 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 let barangSchema = new Schema({
-  judul: {
+  foto: {
     type: String
   },
-  jenisBarang: {
+  keterangan: {
     type: String,
     required: true
   },
-  beratBarang: {
-    type: String,
-    required: true
-  },
-  pinjaman: {
-    type: Number,
-    required: true
-  },
-  _userId: {
+  _kreditId: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'Kredit'
   }
 })
 

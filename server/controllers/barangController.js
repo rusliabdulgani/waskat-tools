@@ -2,9 +2,8 @@ const Barang = require('../models/barang')
 
 let getAllBarang = (req, res) => {
   Barang.find()
-  .populate({path: '_userId'})
   .then(response => {
-    console.log('get all barang: ', response)
+    console.log('get all Barang: ', response)
     res.send(response)
   })
   .catch(err => {
@@ -14,9 +13,8 @@ let getAllBarang = (req, res) => {
 
 let getBarangById = (req, res) => {
   Barang.findById(req.params.id)
-  .populate({path: '_userId'})
   .then(response => {
-    console.log('get barang by id: ', response)
+    console.log('get Barang by id: ', response)
     res.send(response)
   })
   .catch(err => {
@@ -26,11 +24,9 @@ let getBarangById = (req, res) => {
 
 let inputBarang = (req, res) => {
   Barang.create({
-    judul: req.body.judul,
-    jenisBarang: req.body.jenisBarang,
-    beratBarang: req.body.beratBarang,
-    pinjaman: req.body.pinjaman,
-    _userId: req.body._userId
+    foto: req.body.foto,
+    keterangan: req.body.keterangan,
+    _kreditId: req.body._kreditId
   })
   .then(response => {
     res.send(response)
@@ -44,13 +40,12 @@ let editBarang = (req, res) => {
   Barang.update({
     _id: req.params.id
   }, {
-    judul: req.body.judul,
-    jenisBarang: req.body.jenisBarang,
-    beratBarang: req.body.beratBarang,
-    pinjaman: req.body.pinjaman
+    foto: req.body.foto,
+    keterangan: req.body.keterangan,
+    _kreditId: req.body._kreditId
   })
   .then(response => {
-    console.log('edit barang: ', response)
+    console.log('edit Barang: ', response)
     res.send(response)
   })
   .catch(err => {
@@ -63,7 +58,7 @@ let deleteBarang = (req, res) => {
     _id: req.params.id
   })
   .then(response => {
-    console.log('delete barang', response)
+    console.log('delete Barang', response)
     res.send(response)
   })
   .catch(err => {

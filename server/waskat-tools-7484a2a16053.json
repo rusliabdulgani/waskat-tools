@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "waskat-tools",
+  "private_key_id": "7484a2a16053de9df803046f15bd26c61dde0227",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDEAIpxjTLwh6+3\n4tDQjYpY3l2fXRcGUIWemFrB6nzH4q74Slij9wdkKEA75piuuYdwA/4gN8gN/K9C\noMj1ZMlSj0RShYCJAPl/gKtQryPUnTq8yN4vN1FfIidF5rZoXKgmNGbeZy2ew/B/\nnmJs/Zrf1SAv8K/knKIeH/jjZwNU6zrjeVTH2dfZwGY4M09qv6Plqnr8tjQcbMGM\n9gngftZyYbqYXYMvsx3D7MIaN8H7TpOOO/0KG6huUsjJTWcQ3v8T+45x4Ien5RFg\n4HIp3Gz/dQFgycs5ge9Hbhx8MU2BLYfduVAqvJUBKqH0dOtxy/ntoBrR+uuv821T\nl31KG/vxAgMBAAECggEAAY+niqP/Rd8uzR4nX6Hg+jg7MqvBJTG6/rpj7qt5dvYd\nQqkE77ll+6w+Zru9d5bOt1uwyHzpQQNEOhmhwCKfX+L4PlgF4BF760IRG0Fp3aWq\n9Bn9ew7LvSA+g9YEmewzAqrkLt1PhbY10i5mxkt20lWWPguCuyVsPSUwDE+jvSdm\n6ztnEWxSJwDFblr32Yquk8qkqVOZ5P3f0T09cy5mSCRdHpQz5uxpJoaiw44/7dLl\n0Lui2RmFmsbnbMzqtDo+2rEiOxc+4Ra5/AfW8AtFgwHUkpQDFxTq26nfc2GzDLmg\n60Hp6bCHeGC8mr/Y64BmIFStruJ/eGzmKgZHATxkAQKBgQDvE8D+3+1EyoIOj6jr\n5UIJsIzRhDUQ4nbTHpeTtmvEhlAgX0gHXzyEh5+x1NvfPCJpjmAt4fmBfIkndSG4\n99nZPWLPKV4Jn4cx6pT44X9BMldThoIs1aGHiEkrfv225RBAL5iKaVr257OlQ1oa\nvC1XXgILU1QEOqr25Ax7vDHPIQKBgQDR4DyaKPWcN/xpvexfWReJTQnSrlJwbBjY\nTnalCcfO9Y+DM4gBozDsJdixCQfJNXL2MiaPCobVY1DjMLFRVlj4Qn7K8Xiy1Y5j\ngSucpmwaAmdyzT35EnaA9rGi4yKz07CUu3OR9xxjyO8mI6RLolY8MgrtYSNMCDpx\nFBuqf3+i0QKBgF4YhkNKWxZSJfIZNMDzkJRDuojT4hbtKxtY1Qu8JppIysyS88SD\nBUycHIxfXNJ11o15Df3BDPSb0VeIUGd+lW1dLcCfZXWgJhPNYii6h91fNOOY8y82\nPcccKsBF0RHlAgphMUZ4xOactyX6ZkJTgfz68Q8IEu8/L/7QLuGcZnZBAoGBALzu\npP+OQdRY3gR+8au/8x0p2d7sCNClrxQCRnI5xMJ9cq0ElboLo33icBim7Xhngk85\nRFbefhTYrDdpXSbAmaUbjzK4gBRVhTH0VUNW2dfsNB43v0NaKI3eBnmBCXti5QJv\nYRGUp9z4RLlLuppP0FuuHQImwPSwL5QeKu2oi0kRAoGAMr+6uM5IBxdIp/Zq+enc\npaIjBEIPzYrN3KTTDdBjiqD2axMXsZrBiF+YDMRs+QzBC8DHjYrK0i7BnzND3rnE\nzURV1xoE/Oxz304k7Kf4ILIYparFNfQvdtS2yxoQpPEWEnUNnV/E9TDLTknSIGGM\nHnQwGOoVcTG8iPsKnAOwGK4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "waskat-tools@appspot.gserviceaccount.com",
+  "client_id": "109710498887896675506",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/waskat-tools%40appspot.gserviceaccount.com"
+}
