@@ -13,7 +13,7 @@ class SplashScreen extends Component {
         if(result === null){
           Actions.Login({type: "reset"})
         } else {
-          Actions.Home({type: "reset"})
+          Actions.Home({type: "reset", storage: JSON.parse(result)})
         }
       });
     }, DELAY )

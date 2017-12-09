@@ -2,11 +2,11 @@ const storage = require('@google-cloud/storage')
 const generateId = require('../helper/idGen').generateId
 
 const gcs = storage({
-  projectId: 'waskat-186410',
-  keyFilename: ''
+  projectId: 'waskat-tools',
+  keyFilename: './waskat-tools-8cfcb8792f1d.json'
 })
 
-const bucketName = 'waskat-bucket'
+const bucketName = 'asia.artifacts.waskat-tools.appspot.com'
 const bucket = gcs.bucket(bucketName)
 
 function getPublicUrl (filename) {
@@ -18,7 +18,7 @@ var sizeOf = require('image-size')
 
 
 
-module.exports = uploadSingle = (req, res, next) => {
+imgUpload.uploadSingle = (req, res, next) => {
   if (!req.file) {
     res.status(500).json({
       status: false,
@@ -55,5 +55,7 @@ module.exports = uploadSingle = (req, res, next) => {
     next()
   }
 }
+
+module.exports = imgUpload
 
 

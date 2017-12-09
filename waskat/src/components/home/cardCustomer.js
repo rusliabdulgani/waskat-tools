@@ -5,8 +5,8 @@ import axios from 'axios'
 import {allLogo} from '../../assets'
 
 import {headerDeleteUser} from '../../helper/header'
-import {URL_DELETE_USER} from '../../api'
-export default class CardBarang extends React.PureComponent {
+import {URL_DELETE_CUSTOMER} from '../../api'
+export default class CardCustomer extends React.PureComponent {
 
   constructor () {
     super ()
@@ -19,7 +19,7 @@ export default class CardBarang extends React.PureComponent {
     this.props
   }
 
-  _deleteUser (id) {
+  _deleteCustomer (id) {
     AsyncStorage.getItem('headers')
     .then(result => {
       this.setState({
@@ -27,7 +27,7 @@ export default class CardBarang extends React.PureComponent {
       })
     })
     .then(() => {
-      axios(headerDeleteUser(`${URL_DELETE_USER}${id}`, this.state.header ))
+      axios(headerDeleteUser(`${URL_DELETE_CUSTOMER}${id}`, this.state.header ))
       .then(resultAxios => {
         console.log('hasil delete', resultAxios)
         Alert.alert('Sukses!',`Berhasil delete user id: ${id}`)
@@ -39,31 +39,25 @@ export default class CardBarang extends React.PureComponent {
   }
     render () {
       const { 
-      _id,
-      id, 
-      email,
-      username,
-      role,
+        _id,
+        nama,
+        alamat,
+        email
       } = this.props.data
 
-      console.log('ini props' , this.props.data)
       return (
   
-        <View style={styles.cards} key={id}>
+        <View style={styles.cards}>
           <View style={styles.cardContent}>
             <View style={styles.titleContainer}>
-              <View><Text style={styles.titleKeluhan}>ID: {id}</Text>
-              {
-                  role === 'admin' &&
-                <Text style={styles.textAdmin}>{role}</Text>
-                }
-                <Text style={styles.dateKeluhan}>Username: {username}</Text>
+              <View><Text style={styles.titleKeluhan}>Nama: {nama}</Text>
+                <Text style={styles.dateKeluhan}>Alamat : {alamat}</Text>
                 <Text style={styles.dateKeluhan}>Email: {email}</Text>
                 <View style={styles.buttonAdmin}>
                 </View>
               </View>
             </View>
-              <TouchableOpacity style={styles.keluhanPreview} onPress={() => this._deleteUser(_id)}>
+              <TouchableOpacity style={styles.keluhanPreview} onPress={() => this._deleteCustomer(_id)}>
                 <Text style={styles.textButtonHapus}>Hapus</Text>
               </TouchableOpacity>
           </View>
@@ -125,17 +119,17 @@ export default class CardBarang extends React.PureComponent {
     },
     cards: {
       flex:1,
-      height: height * 0.22,
+      height: height * 0.20,
       width: width*0.95,
       flexDirection: 'row',
       justifyContent: 'space-between',
       borderRadius: 10,
-      elevation: 3,
+      elevation: 2,
       backgroundColor: 'white',
-      shadowOpacity: 0.8,
+      shadowOpacity: 0.5,
       shadowOffset: {
-        height: 5,
-        width: 3
+        height: 8,
+        width: 5
       },
       shadowColor: '#eeeeee',
       marginTop: 5
@@ -179,7 +173,7 @@ export default class CardBarang extends React.PureComponent {
     },
     keluhanPreviewContainer: {
       flex:1,
-      paddingTop: 50
+      paddingTop: 10
     },
     titleKeluhan: {
       fontFamily: 'BrandonText-Light',
@@ -191,7 +185,8 @@ export default class CardBarang extends React.PureComponent {
       fontSize: 15,
       color: 'green',
       lineHeight: 18,
-      paddingTop: 5
+      paddingTop: 5,
+      marginBottom: 10
     },
     keluhanPreview: {
       padding: 5,

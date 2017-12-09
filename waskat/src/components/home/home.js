@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Alert, Text, BackHandler, StyleSheet, Platform, TouchableOpacity, Dimensions, Image } from 'react-native'
+import { View, Alert, Text, BackHandler, StyleSheet, AsyncStorage, Platform, TouchableOpacity, Dimensions, Image } from 'react-native'
 import { Actions } from 'react-native-router-flux'
 import {OptimizedFlatList} from 'react-native-optimized-flatlist'
 import Modal from 'react-native-modal'
@@ -17,11 +17,18 @@ export default class Home extends Component {
       super (props)
       this.state = {
         reports: [],
-        visibleModal: ''
+        visibleModal: null,
+        headers: this.props.storage
       }
   }
-
+  
   componentDidMount () {
+    AsyncStorage.getItem('headers')
+    .then(result => {
+      this.setState({
+        headers: JSON.parse(result)
+      })
+    })
     BackHandler.addEventListener('hardwareBackPress', () => this._backAndroid())
   }
 
@@ -45,9 +52,13 @@ export default class Home extends Component {
     return true
   }
 
+  _signOut () {
+    AsyncStorage.clear()
+    Actions.Login({type: 'replace'})
+  }
+
   
   componentDidMount () {
-    this._setReports()
     BackHandler.addEventListener('hardwareBackPress', () => this._backAndroid())
   }
 
@@ -55,42 +66,7 @@ export default class Home extends Component {
     Actions.AddBarang({type: 'replace'})
   }
 
-  _setReports () {
-    let datas = [
-      {
-        judul: 'emas oke oce',
-        jenis_barang: 'logam mulia/emas',
-        berat_barang: '13 gram',
-        pinjaman: 10000000,
-        foto: 'http://scofany.com/wp-content/uploads/2014/10/KR05-1.jpg'
-      },
-      {
-        judul: 'jam tangan alexander christie',
-        jenis_barang: 'perhiasan',
-        berat_barang: '200 gram',
-        pinjaman: 5000000,
-        foto: 'https://dynamic.zacdn.com/-1VLhAjwhCVbP0DvfWeC-UEqets=/fit-in/236x345/filters:quality(90):fill(ffffff)/http://static.id.zalora.net/p/alexandre-christie-4718-9716341-2.jpg'
-      },
-      {
-        judul: 'Sepeda Motor Honda Vario',
-        jenis_barang: 'kendaraan',
-        berat_barang: '-',
-        pinjaman: 5000000,
-        foto: 'http://cdnhonda.azureedge.net/wp-content/uploads/2017/04/fitur-vario-125-2017-new.png'
-      },
-      {
-        judul: 'Cincin berlian',
-        jenis_barang: 'Perhiasan',
-        berat_barang: '10 gram',
-        pinjaman: 15000000,
-        foto: 'http://www.permata-berlian.info/wp-content/uploads/2017/02/harga-cincin-berlian.jpg'
-      },
-      
-    ]
-    this.setState({ reports: datas})
-  }
-
-  _renderItem ({item}) {
+  _renderItem ({item}) { 
     return (
       <View>
         <TouchableOpacity activeOpacity={1} onPress={() => Actions.DetailBarang({detail: item})}>
@@ -100,33 +76,61 @@ export default class Home extends Component {
     )
   }
 
+  _menu (pilihan) {
+    if (pilihan === 'User') {
+      Actions.User({type: 'replace'})
+    } else if (pilihan === 'Customer') {
+      Actions.Customer({type: 'replace'})
+    } else if (pilihan === 'Kredit') {
+      Actions.Kredit({type: 'replace'})
+    }
+  }
+
   render () {
-    let { reports, visibleModal } = this.state
-    console.log('data dummie', reports, visibleModal)
+    console.log(this.props.storage)
+    let { reports, visibleModal, headers } = this.state
+    console.log('headers', headers)
     return (
       <View style={styles.container}>
         {/* header area */}
-        <View style={styles.headerHistory}>
-          <Text style={styles.title}>List Barang</Text>
+        <Modal isVisible={this.state.visibleModal === 'dialog_logout'} backdropOpacity={0.4} animationIn={'fadeIn'} animationOut={'fadeOut'} backdropColor={'black'}>
+           <View style={styles.viewDialogJenisLayanan}>
+             <View style={styles.cardDialogRadius}>
+                <Text style={styles.textConfirm}>Apakah Anda yakin sign out {'\n'}dari aplikasi ?</Text>
+                <View style={styles.lineDialog} />
+                <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity style={styles.viewTidak} onPress={() => this.setState({ visibleModal: null })}>
+                    <Text style={styles.textYa}> TIDAK </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.viewYa} onPress={() => this._signOut()}>
+                    <Text style={styles.textTidak}> YA </Text>
+                  </TouchableOpacity>
+                </View>
+             </View>
+           </View>
+         </Modal>
+
+        <View style={styles.headerHistory}> 
+          <Text style={styles.title}>Home</Text>
           <View style={styles.headerRight} />
         </View>
-        
-         { reports.length !== 0 ?
-          (<OptimizedFlatList
-            style={styles.content}
-            data={reports}
-            keyExtractor={() => uniqueNumber()}
-            renderItem={this._renderItem}
-            />) :
-            (
-              <View style={{flex:1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{fontSize: 24}}>Belum ada data</Text>
-              </View>
-            )
-          }
-          <TouchableOpacity style={styles.addKeluhanButtonContainer} onPress={() => this._changeSceneAddBarang()}>
-            <Image style={styles.addKeluhanButton} source={allLogo.add} />
-          </TouchableOpacity>
+        <View style={{flex: 1}}>
+        {
+          headers.role === 'admin' && 
+        <TouchableOpacity style={styles.cards} onPress={() => this._menu('User')}>
+          <Text style={styles.textYa}>User</Text>
+        </TouchableOpacity>
+        }
+        <TouchableOpacity style={styles.cards} onPress={() => this._menu('Customer')}>
+          <Text style={styles.textYa}>Customer</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.cards} onPress={() => this._menu('Kredit')}>
+          <Text style={styles.textYa}>Kredit</Text>
+        </TouchableOpacity>
+        </View>
+        <TouchableOpacity style={styles.logoutButton} onPress={() => this.setState({visibleModal: 'dialog_logout'})}>
+        <Text style={styles.textLogout}>Sign Out</Text>
+        </TouchableOpacity>
 
          
       </View>
@@ -134,17 +138,27 @@ export default class Home extends Component {
   }
 }
 
-const windowHeight = Dimensions.get('window').height
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'stretch'
+    alignItems: 'center'
   },
   viewDialogJenisLayanan: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  logoutButton: {
+    width: width,
+    height: height * 0.08,
+    backgroundColor: '#0D6129',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  textLogout: {
+    color: 'white',
+    fontSize: 20
   },
   list: {
     justifyContent: 'center',
@@ -163,7 +177,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   textYa: {
-    fontSize: 14,
+    fontSize: 20,
     color: '#333333',
     fontFamily: 'BrandonText-Black'
   },
@@ -184,7 +198,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    marginTop: (10 / 100 * windowHeight + 24),
+    marginTop: (10 / 100 * height + 24),
     zIndex: 3,
     backgroundColor: '#eee',
     opacity: 0.75,
@@ -213,7 +227,7 @@ const styles = StyleSheet.create({
     elevation: 2
   },
   filterOptionsContainer: {
-    marginTop: (10 / 100 * windowHeight + 24),
+    marginTop: (10 / 100 * height + 24),
     position: 'absolute',
     paddingLeft: 16,
     paddingRight: 16,
@@ -381,5 +395,23 @@ const styles = StyleSheet.create({
     fontFamily: 'BrandonText-Black',
     fontSize: 18,
     color: '#333333'
+  },
+  cards: {
+    height:height * 0.1,
+    width: width * 0.9,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderRadius: 10,
+    backgroundColor: 'white',
+    elevation: 3,
+    shadowOpacity: 0.8,
+    shadowOffset: {
+      height: 5,
+      width: 3
+    },
+    shadowColor: '#eeeeee',
+    margin: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })

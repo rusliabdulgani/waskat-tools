@@ -83,7 +83,8 @@ let signIn = (req, res) => {
         token: token,
         id: response.id,
         username: response.username,
-        email: response.email
+        email: response.email,
+        role: response.role
       })
       } else {
         res.send('password salah')
