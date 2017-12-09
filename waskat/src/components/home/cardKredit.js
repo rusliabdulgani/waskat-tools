@@ -6,7 +6,7 @@ import {allLogo} from '../../assets'
 
 import {headerDeleteUser} from '../../helper/header'
 import {URL_DELETE_USER} from '../../api'
-export default class CardBarang extends React.PureComponent {
+export default class CardKredit extends React.PureComponent {
 
   constructor () {
     super ()
@@ -39,32 +39,26 @@ export default class CardBarang extends React.PureComponent {
   }
     render () {
       const { 
-      _id,
-      id, 
-      email,
-      username,
-      role,
+        noKredit,
+        _customerId,
+        pinjaman
       } = this.props.data
 
       console.log('ini props' , this.props.data)
       return (
   
-        <View style={styles.cards} key={id}>
+        <View style={styles.cards}>
           <View style={styles.cardContent}>
             <View style={styles.titleContainer}>
-              <View><Text style={styles.titleKeluhan}>ID: {id}</Text>
-              {
-                  role === 'admin' &&
-                <Text style={styles.textAdmin}>{role}</Text>
-                }
-                <Text style={styles.dateKeluhan}>Username: {username}</Text>
-                <Text style={styles.dateKeluhan}>Email: {email}</Text>
+              <View><Text style={styles.titleKeluhan}>No Kredit: {noKredit}</Text>
+                <Text style={styles.dateKeluhan}>Nama Peminjam: {_customerId.nama}</Text>
+                <Text style={styles.dateKeluhan}>Jumlah Pinjaman: Rp. {pinjaman}</Text>
                 <View style={styles.buttonAdmin}>
                 </View>
               </View>
             </View>
               <TouchableOpacity style={styles.keluhanPreview} onPress={() => this._deleteUser(_id)}>
-                <Text style={styles.textButtonHapus}>Hapus</Text>
+                <Text style={styles.textButtonHapus}>Detail Kredit</Text>
               </TouchableOpacity>
           </View>
           <TouchableOpacity>
@@ -194,19 +188,21 @@ export default class CardBarang extends React.PureComponent {
       paddingTop: 5
     },
     keluhanPreview: {
-      padding: 5,
-      marginRight: 10,
-      marginLeft: 5,
-      width: width * 0.25,
+      width: width,
+      height: height*0.05,
+      justifyContent: 'center',
+      position: 'absolute',
+      bottom: 0,
+      borderBottomLeftRadius: 10,
+      borderBottomRightRadius: 10,
       backgroundColor: 'green',
-      borderRadius: 30,
       justifyContent: 'center',
       alignItems: 'center',
 
     },
     textButtonHapus: {
       fontFamily: 'BrandonText-Light',
-      fontSize: 16,
+      fontSize: 20,
       color: 'white'
     }
   })

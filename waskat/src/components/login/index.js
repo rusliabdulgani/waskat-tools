@@ -20,14 +20,16 @@ class Login extends Component {
       isConnected: '',
       sourceUsername: allLogo.username,
       sourcePassword: allLogo.password,
-      spinnerVisible: false
+      spinnerVisible: false,
+      storage: {}
     }
     this.animatedValue = new Animated.Value(235) 
   }
+  
 
   componentWillMount () {
     NetInfo.isConnected.addEventListener('connectionChange',  this.handleConnectionChange)
-    BackHandler.addEventListener('hardwareBackPress', () => this.backAndroid())
+    BackHandler.addEventListener('hardwareBackPress', () => this._backAndroid())
     NetInfo.isConnected.fetch().done(
       (isConnected) => {
         this.setState({isConnected: isConnected ? 'online' : 'offline'})
@@ -36,12 +38,23 @@ class Login extends Component {
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', () => this.backAndroid())
+    BackHandler.removeEventListener('hardwareBackPress', () => this._backAndroid())
       NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
   }
 
-  backAndroid() {
-    BackHandler.exitApp()
+  _backAndroid () {
+    Alert.alert(
+      'Keluar dari Aplikasi',
+      'Apakah anda ingin keluar dari aplikasi?',
+      [{text: 'Tidak', 
+        onPress: () => console.log('Cancel'),
+        style: 'cancel'
+      }, {
+        text: 'OK',
+        onPress: () => BackHandler.exitApp()
+      }],
+      { cancelable: false }
+    )
     return true
   }
 
@@ -69,7 +82,7 @@ class Login extends Component {
       AsyncStorage.setItem('headers', JSON.stringify(input.data)),
       AsyncStorage.setItem('dataUser', JSON.stringify(input.data)),
       this.setState({spinnerVisible: false}),
-      Actions.Home({type: "reset"}),
+      Actions.Home({type: "reset", storage: input.data}),
       console.log('input'),
       Keyboard.dismiss()
       ) : (

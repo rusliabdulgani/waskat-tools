@@ -6,25 +6,26 @@ import {OptimizedFlatList} from 'react-native-optimized-flatlist'
 import axios from 'axios'
 
 import { allLogo } from '../../assets'
-import {headerAddUser} from '../../helper/header'
-import {URL_ADD_USER} from '../../api'
+import {headerAddUser, headerGetDataBarang} from '../../helper/header'
+import {URL_GET_DATA_CUSTOMER} from '../../api'
 
 let {width, height} = Dimensions.get('window')
-export default class AddUser extends Component {
+export default class AddKredit extends Component {
   constructor (props) {
     super (props)
     this.state = {
-        role: 'admin',
-        id: '',
-        username: '',
-        password: '',
+        customer: 'customer',
+        nama: '',
+        alamat: '',
         email: '',
         headers: {},
-        animate: false
+        animate: false,
+        customers: []
     }
   }
 
   componentDidMount () {
+    this._getCustomer()
     AsyncStorage.getItem('headers').then((keyValue) => { this.setState(previousState => { return {headers: JSON.parse(keyValue)} }) })
     BackHandler.addEventListener('hardwareBackPress', () => this.backAndroid())
   }
@@ -44,12 +45,12 @@ export default class AddUser extends Component {
   _backButton () {
     Alert.alert(
       'Hi,',
-      'Apakah Anda yakin tidak ingin menambah user ?',
+      'Apakah Anda yakin tidak ingin membuat kredit baru ?',
       [
         {text: 'IYA',
           onPress: () => {
             // this.props.clearContent()
-            Actions.User({type: 'replace'})
+            Actions.Kredit({type: 'replace'})
           }
         },
         {text: 'TIDAK', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
@@ -58,34 +59,51 @@ export default class AddUser extends Component {
     )
   }
 
-  _onChangeID (event) {
-    this.setState({id: event.nativeEvent.text})
+  _oncChangeNoKredit (event) {
+    this.setState({noKredit: event.nativeEvent.text})
   }
 
-  _onChangeUsername (event) {
-    this.setState({username: event.nativeEvent.text})
-  }
-
-  _onChangePassword (event) {
-    this.setState({password: event.nativeEvent.text})
+  _onChangePinjaman (event) {
+    this.setState({pinjaman: event.nativeEvent.text})
   }
 
   _onChangeEmail (event) {
     this.setState({email: event.nativeEvent.text})
-    
   }
 
+  _getCustomer() {
+    AsyncStorage.getItem('headers')
+    .then(result => {
+      this.setState({
+        headers: JSON.parse(result)
+      })
+    })
+    .then(() => {
+        axios(headerGetDataBarang(URL_GET_DATA_CUSTOMER, this.state.headers))
+        .then(resultAxios => {
+            console.log('data customer', resultAxios.data)
+            this.setState({
+                customers: resultAxios.data
+            })
+        })
+        .catch(err => {
+            console.log('error get customers', err)
+            Alert.alerr('Error!','Internal Server Error')
+        })
+    })
+    .catch(err => {
+        console.log(err)
+    })
+  }
 
-  _addUser() {
+  _addCustomer() {
     this.setState({
       animate: true
     })
     let data = {
-      id: this.state.id,
-      username: this.state.username,
-      password: this.state.password,
-      email: this.state.email,
-      role: this.state.role
+        nama: this.state.nama,
+        alamat: this.state.alamat,
+        email: this.state.email
     }
     AsyncStorage.getItem('headers')
     .then(result => {
@@ -95,14 +113,14 @@ export default class AddUser extends Component {
     })
     .then(() => {
       console.log('headers', this.state.headers)
-      axios(headerAddUser(URL_ADD_USER,this.state.headers, data))
+      axios(headerAddUser(URL_GET_DATA_CUSTOMER,this.state.headers, data))
       .then(resultAxios => {
-          console.log('data user', resultAxios)
+          console.log('data customer', resultAxios)
         this.setState({
             animate: false,
             dataUser: resultAxios.data
         })
-        Alert.alert('Sukses!','Berhasil input user baru')
+        Alert.alert('Sukses!','Berhasil input customer')
       })
       .catch(err => {
         this.setState({
@@ -115,19 +133,17 @@ export default class AddUser extends Component {
   }
 
   _validation () {
-    if (this.state.id.length === 0) {
-      Alert.alert('Warning!','Kolom ID harus diisi')
-    } else if (this.state.username.length === 0 ) {
-      Alert.alert('Warning!','Kolom username harus diisi')
-    } else if (this.state.password.length === 0 ) {
-      Alert.alert('Warning!','Kolom password harus diisi')
+    if (this.state.nama.length === 0) {
+      Alert.alert('Warning!','Kolom nama harus diisi')
+    } else if (this.state.alamat.length === 0 ) {
+      Alert.alert('Warning!','Kolom alamat harus diisi')
     } else if (this.state.email.length === 0 ) {
       Alert.alert('Warning!','Kolom email harus diisi')
     } else if (!this.validateEmail(this.state.email)) {
       Alert.alert('Warning!','format email harus sesuai')
     } else {
-      this._addUser()
-      Actions.User({type: 'replace'})
+      this._addCustomer()
+      Actions.Kredit({type: 'replace'})
     }
   }
 
@@ -152,39 +168,47 @@ export default class AddUser extends Component {
             <Image source={allLogo.backSymbol} style={{width: 40, height: 40, marginLeft: 10}} />
           </TouchableOpacity>
           </View>
-          <Text style={styles.title}>Add User</Text>
+          <Text style={styles.title}>Buat Kredit</Text>
           <View style={styles.headerRight} />
         </View>
 
         <View style={[styles.viewContent]}>
-          <View style={{flex: 0.6}}>
-          <View style={styles.viewInput}>
-            <TextInput
-              onChange={(event) => { this._onChangeID(event) }}
-              placeholder='ID'
-              returnKeyType='next'
-              autoCapitalize='none'
-              underlineColorAndroid='transparent'
-              style={styles.textInput} />
-          </View>
+            <View style={{flex: 0.5}}>
+            <View style={styles.viewInput}>
+                <TextInput
+                    onChange={(event) => { this._oncChangeNoKredit(event) }}
+                    placeholder='No Kredit'
+                    returnKeyType='next'
+                    autoCapitalize='none'
+                    underlineColorAndroid='transparent'
+                    style={styles.textInput} />
+            </View>
+            <View style={{flex: 3, flexDirection: 'row'}}>
+                <View style={{width:width * 0.3, paddingTop: 15}}>
+                    <Text>Customer </Text>
+                </View>
+                <View style={{width:width * 0.5, paddingRight: 1}}>
+                    <Picker
+                    selectedValue={this.state.customer}
+                    prompt='pilih customer'
+                    onValueChange={(itemValue, itemIndex) => this.setState({customer: itemValue})}>
+                    {
+                        this.state.customers.map((cust, idx) => {
+                            return (
+                                <Picker.Item label={`${idx+1}. ${cust.nama}`} value={cust._id} />
+                            )
+                        })
+                    }
+                    </Picker>
+                </View>
+            </View>
     
           <View style={[styles.viewInput, {marginTop: 20}]}>
             <TextInput
-              onChange={(event) => { this._onChangeUsername(event) }}
-              placeholder='Username'
+              onChange={(event) => { this._onChangePinjaman(event) }}
+              placeholder='Pinjaman'
               returnKeyType='next'
               underlineColorAndroid='transparent'
-              maxLength={25}
-              style={styles.textInput} />
-        </View>
-        <View style={[styles.viewInput, {marginTop: 20}]}>
-            <TextInput
-              onChange={(event) => { this._onChangePassword(event) }}
-              placeholder='Password'
-              returnKeyType='next'
-              secureTextEntry
-              underlineColorAndroid='transparent'
-              maxLength={25}
               style={styles.textInput} />
         </View>
         <View style={[styles.viewInput, {marginTop: 20}]}>
@@ -197,20 +221,7 @@ export default class AddUser extends Component {
               maxLength={25}
               style={styles.textInput} />
         </View>
-        <View style={{flex: 1, flexDirection: 'row'}}>
-        <View style={{width:width * 0.3, paddingTop: 15}}>
-          <Text>Role: </Text>
-        </View>
-        <View style={{width:width * 0.5, paddingRight: 1}}>
-        <Picker
-          selectedValue={this.state.role}
-          onValueChange={(itemValue, itemIndex) => this.setState({role: itemValue})}>
-          <Picker.Item label="admin" value="admin" />
-          <Picker.Item label="user" value="user" />
-        </Picker>
-        </View>
-        </View>
-          </View>
+            </View>
     
         </View>
         <View>

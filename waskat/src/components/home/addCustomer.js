@@ -7,7 +7,7 @@ import axios from 'axios'
 
 import { allLogo } from '../../assets'
 import {headerAddUser} from '../../helper/header'
-import {URL_ADD_USER} from '../../api'
+import {URL_ADD_CUSTOMER} from '../../api'
 
 let {width, height} = Dimensions.get('window')
 export default class AddUser extends Component {
@@ -15,9 +15,8 @@ export default class AddUser extends Component {
     super (props)
     this.state = {
         role: 'admin',
-        id: '',
-        username: '',
-        password: '',
+        nama: '',
+        alamat: '',
         email: '',
         headers: {},
         animate: false
@@ -44,12 +43,12 @@ export default class AddUser extends Component {
   _backButton () {
     Alert.alert(
       'Hi,',
-      'Apakah Anda yakin tidak ingin menambah user ?',
+      'Apakah Anda yakin tidak ingin menambah customer ?',
       [
         {text: 'IYA',
           onPress: () => {
             // this.props.clearContent()
-            Actions.User({type: 'replace'})
+            Actions.Customer({type: 'replace'})
           }
         },
         {text: 'TIDAK', onPress: () => console.log('Cancel Pressed'), style: 'cancel'}
@@ -58,34 +57,28 @@ export default class AddUser extends Component {
     )
   }
 
-  _onChangeID (event) {
-    this.setState({id: event.nativeEvent.text})
+  _onChangeNama (event) {
+    this.setState({nama: event.nativeEvent.text})
   }
 
-  _onChangeUsername (event) {
-    this.setState({username: event.nativeEvent.text})
-  }
-
-  _onChangePassword (event) {
-    this.setState({password: event.nativeEvent.text})
+  _onChangeAlamat (event) {
+    this.setState({alamat: event.nativeEvent.text})
   }
 
   _onChangeEmail (event) {
     this.setState({email: event.nativeEvent.text})
-    
   }
 
 
-  _addUser() {
+
+  _addCustomer() {
     this.setState({
       animate: true
     })
     let data = {
-      id: this.state.id,
-      username: this.state.username,
-      password: this.state.password,
-      email: this.state.email,
-      role: this.state.role
+        nama: this.state.nama,
+        alamat: this.state.alamat,
+        email: this.state.email
     }
     AsyncStorage.getItem('headers')
     .then(result => {
@@ -95,14 +88,14 @@ export default class AddUser extends Component {
     })
     .then(() => {
       console.log('headers', this.state.headers)
-      axios(headerAddUser(URL_ADD_USER,this.state.headers, data))
+      axios(headerAddUser(URL_ADD_CUSTOMER,this.state.headers, data))
       .then(resultAxios => {
-          console.log('data user', resultAxios)
+          console.log('data customer', resultAxios)
         this.setState({
             animate: false,
             dataUser: resultAxios.data
         })
-        Alert.alert('Sukses!','Berhasil input user baru')
+        Alert.alert('Sukses!','Berhasil input customer')
       })
       .catch(err => {
         this.setState({
@@ -115,19 +108,17 @@ export default class AddUser extends Component {
   }
 
   _validation () {
-    if (this.state.id.length === 0) {
-      Alert.alert('Warning!','Kolom ID harus diisi')
-    } else if (this.state.username.length === 0 ) {
-      Alert.alert('Warning!','Kolom username harus diisi')
-    } else if (this.state.password.length === 0 ) {
-      Alert.alert('Warning!','Kolom password harus diisi')
+    if (this.state.nama.length === 0) {
+      Alert.alert('Warning!','Kolom nama harus diisi')
+    } else if (this.state.alamat.length === 0 ) {
+      Alert.alert('Warning!','Kolom alamat harus diisi')
     } else if (this.state.email.length === 0 ) {
       Alert.alert('Warning!','Kolom email harus diisi')
     } else if (!this.validateEmail(this.state.email)) {
       Alert.alert('Warning!','format email harus sesuai')
     } else {
-      this._addUser()
-      Actions.User({type: 'replace'})
+      this._addCustomer()
+      Actions.Customer({type: 'replace'})
     }
   }
 
@@ -152,64 +143,40 @@ export default class AddUser extends Component {
             <Image source={allLogo.backSymbol} style={{width: 40, height: 40, marginLeft: 10}} />
           </TouchableOpacity>
           </View>
-          <Text style={styles.title}>Add User</Text>
+          <Text style={styles.title}>Add Customer</Text>
           <View style={styles.headerRight} />
         </View>
 
         <View style={[styles.viewContent]}>
-          <View style={{flex: 0.6}}>
-          <View style={styles.viewInput}>
-            <TextInput
-              onChange={(event) => { this._onChangeID(event) }}
-              placeholder='ID'
-              returnKeyType='next'
-              autoCapitalize='none'
-              underlineColorAndroid='transparent'
-              style={styles.textInput} />
+          <View style={{flex: 0.5}}>
+            <View style={styles.viewInput}>
+              <TextInput
+                onChange={(event) => { this._onChangeNama(event) }}
+                placeholder='Nama'
+                returnKeyType='next'
+                autoCapitalize='none'
+                underlineColorAndroid='transparent'
+                style={styles.textInput} />
+            </View>
+      
+            <View style={[styles.viewInput, {marginTop: 20}]}>
+              <TextInput
+                onChange={(event) => { this._onChangeAlamat(event) }}
+                placeholder='Alamat'
+                returnKeyType='next'
+                underlineColorAndroid='transparent'
+                style={styles.textInput} />
           </View>
-    
           <View style={[styles.viewInput, {marginTop: 20}]}>
-            <TextInput
-              onChange={(event) => { this._onChangeUsername(event) }}
-              placeholder='Username'
-              returnKeyType='next'
-              underlineColorAndroid='transparent'
-              maxLength={25}
-              style={styles.textInput} />
-        </View>
-        <View style={[styles.viewInput, {marginTop: 20}]}>
-            <TextInput
-              onChange={(event) => { this._onChangePassword(event) }}
-              placeholder='Password'
-              returnKeyType='next'
-              secureTextEntry
-              underlineColorAndroid='transparent'
-              maxLength={25}
-              style={styles.textInput} />
-        </View>
-        <View style={[styles.viewInput, {marginTop: 20}]}>
-            <TextInput
-              onChange={(event) => { this._onChangeEmail(event) }}
-              placeholder='Email'
-              returnKeyType='next'
-              keyboardType='email-address'
-              underlineColorAndroid='transparent'
-              maxLength={25}
-              style={styles.textInput} />
-        </View>
-        <View style={{flex: 1, flexDirection: 'row'}}>
-        <View style={{width:width * 0.3, paddingTop: 15}}>
-          <Text>Role: </Text>
-        </View>
-        <View style={{width:width * 0.5, paddingRight: 1}}>
-        <Picker
-          selectedValue={this.state.role}
-          onValueChange={(itemValue, itemIndex) => this.setState({role: itemValue})}>
-          <Picker.Item label="admin" value="admin" />
-          <Picker.Item label="user" value="user" />
-        </Picker>
-        </View>
-        </View>
+              <TextInput
+                onChange={(event) => { this._onChangeEmail(event) }}
+                placeholder='Email'
+                returnKeyType='next'
+                keyboardType='email-address'
+                underlineColorAndroid='transparent'
+                maxLength={25}
+                style={styles.textInput} />
+          </View>
           </View>
     
         </View>
