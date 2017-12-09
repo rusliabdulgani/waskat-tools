@@ -1,122 +1,47 @@
 import React, { Component } from 'react'
-import { View, ActivityIndicator, Text, Image, TouchableOpacity, StyleSheet, TextInput, Dimensions, Alert, Modal, FlatList, AsyncStorage, BackHandler} from 'react-native'
+import { View, Text, ActivityIndicator, Image, TouchableOpacity, StyleSheet, Picker, TextInput, Dimensions, Alert, Modal, AsyncStorage, BackHandler} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import FitImage from 'react-native-fit-image'
 import {OptimizedFlatList} from 'react-native-optimized-flatlist'
 import axios from 'axios'
 
 import { allLogo } from '../../assets'
-import {URL_GET_KREDIT} from '../../api'
-import {headerGetDataBarang} from '../../helper/header'
-import CardKredit from './cardKredit'
 
 let {width, height} = Dimensions.get('window')
-
-export default class Kredit extends Component {
+export default class DetailKredit extends Component {
   constructor (props) {
     super (props)
     this.state = {
-        dataKredit: [],
-        detailKredit: {},
+        role: 'admin',
+        nama: '',
+        alamat: '',
+        email: '',
         headers: {},
         animate: false
     }
   }
 
   componentDidMount () {
-    this.getAllKredit()
-    AsyncStorage.getItem('headers')
-    .then(result => {
-        this.setState({
-            headers: JSON.parse(result)
-        })
-    })
+    AsyncStorage.getItem('headers').then((keyValue) => { this.setState(previousState => { return {headers: JSON.parse(keyValue)} }) })
     BackHandler.addEventListener('hardwareBackPress', () => this.backAndroid())
+  }
+
+  componentWillMount () {
   }
 
   componentWillUnmount () {
     BackHandler.removeEventListener('hardwareBackPress', () => this.backAndroid())
   }
+
   backAndroid () {
-    Actions.Home({type: 'replace', storage: this.state.headers})
+    Actions.Kredit({type: 'replace'})    
     return true
   }
 
-  _renderItem({item}) {
-    return (
-      <CardKredit 
-      data={item}
-      id={item._id}
-      />
-    )
-}
-
-  getAllKredit () {
-    this.setState({
-      animate: true
-    })
-    AsyncStorage.getItem('headers')
-    .then(result => {
-      this.setState({
-        headers: JSON.parse(result)
-      })
-    })
-    .then(() => {
-      axios(headerGetDataBarang(URL_GET_KREDIT, this.state.headers))
-      .then(resultAxios => {
-        this.setState({
-          animate: false
-        })
-        console.log('data kredit', resultAxios.data)
-        this.setState({
-          dataKredit: resultAxios.data
-        })
-      })
-      .catch(err => {
-        console.log('error get data kredit', err)
-        Alert.alert('Error!', 'Internal server error')
-      })
-    })
-
-  }
-
-  _detailKredit (id) {
-    AsyncStorage.getItem('headers')
-    .then(result => {
-      this.setState({
-        headers: JSON.parse(result)
-      })
-    })
-    .then(() => {
-      axios(headerGetDataBarang(`${URL_GET_KREDIT}${id}`, this.state.headers))
-      .then(resultAxios => {
-        this.setState({
-          animate: false
-        })
-        console.log('data kredit', resultAxios.data)
-        this.setState({
-          detailKredit: resultAxios.data
-        })
-        Actions.DetailKredit({type: 'replace', detail: this.state.detailKredit})
-      })
-      .catch(err => {
-        console.log('error get data kredit', err)
-        Alert.alert('Error!', 'Internal server error')
-      })
-    })
-  }
-
-
-  _addKreditPage() {
-    Actions.AddKredit({style: 'replace'})
-  }
-
-  _confirmation () {
-    this.setState(previousState => { return {showModal: false} }, this.props.clearContent())
-    Actions.Home({type: 'replace', storage: this.state.headers})
-  }
 
   render () {
+    console.log('props', this.props.detailKredit._barangId.foto)
+    let {noKredit, _customerId, _barangId, pinjaman} = this.props.detailKredit
     return (
         <View style={styles.viewImg}>
          {/* header area */}
@@ -126,23 +51,34 @@ export default class Kredit extends Component {
             <Image source={allLogo.backSymbol} style={{width: 40, height: 40, marginLeft: 10}} />
           </TouchableOpacity>
           </View>
-          <Text style={styles.title}>Kredit</Text>
+          <Text style={styles.title}>Detail Kredit</Text>
           <View style={styles.headerRight} />
         </View>
-        {
-            this.state.animate ?
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <ActivityIndicator  size='large' color='#0D6129' />
+
+        <View style={[styles.viewContent]}>
+          <View style={{flex: 0.8, alignItems: 'center', paddingTop: 20}}>
+
+            <Text>No Kredit : {noKredit}</Text>
+            <Text>Customer  : {_customerId.nama}</Text>
+            <Text>Pinjaman: Rp. {pinjaman}</Text>
+            <Text>Barang: </Text>
+            {
+                _barangId.map((barang, idx) => {
+                    return (
+                        <Image source={{uri: barang.foto}} style={{ borderRadius: 25, flex: 1, flexDirection: 'column', height: 100, width: 100, resizeMode: 'contain'}}></Image>
+                    )
+                })
+            }
+          </View>
+    
         </View>
-        : 
-        <FlatList 
-        style={{marginBottom: 60}}
-        data={this.state.dataKredit}
-        keyExtractor={(item, idx)=> item}
-        renderItem={this._renderItem}/>
-        }
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => this._addKreditPage()}>
-            <Text style={styles.textButton}>Buat Kredit Baru</Text>
+        <View>
+          <ActivityIndicator animating={this.state.animate} size='large' color='#0D6129'/>
+        </View>
+        <View style={{alignItems: 'center'}}>
+        </View>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => { this._validation() }}>
+          <Text style={styles.buttonText}>H A P U S</Text>
         </TouchableOpacity>
       </View>
     )
@@ -150,11 +86,6 @@ export default class Kredit extends Component {
 }
 
 const styles = StyleSheet.create({
-    textButton: {
-      fontSize: 20,
-      color: 'white',
-      fontFamily: 'BrandonText-Light'
-    },
     header: {
         width: '100%',
         backgroundColor: '#0D6129',
@@ -204,13 +135,19 @@ const styles = StyleSheet.create({
       },
       viewContent: {
         flex: 1,
+        marginLeft: 10,
+        marginRight: 10,
         paddingLeft: 40,
         paddingRight: 40,
-        backgroundColor: 'transparent',
-        height: 'auto',
-        marginTop: 100
+        paddingTop: 30,
+        backgroundColor: 'white',
+        borderRadius: 10,
+        height: height*0.3,
+        width: width*0.9,
+        marginTop: 60
       },
       viewInput: {
+        flex: 3,
         flexDirection: 'row'
       },
       textInput: {
@@ -246,7 +183,7 @@ const styles = StyleSheet.create({
       buttonText: {
         textAlign: 'center',
         fontFamily: 'BrandonText-Black',
-        fontSize: 15,
+        fontSize: 20,
         color: 'white'
       },
       viewContentKataSandi: {

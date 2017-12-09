@@ -12,6 +12,7 @@ import Customer from '../src/components/home/Customer'
 import User from '../src/components/home/User'
 import Kredit from '../src/components/home/Kredit'
 import AddKredit from '../src/components/home/addKredit'
+import DetailKredit from '../src/components/home/detailKredit'
 
 class App extends Component {
 
@@ -28,6 +29,7 @@ class App extends Component {
             <Scene key='Kredit' component={Kredit} title='Kredit' panHandlers={null} />
             <Scene key='AddCustomer' component={AddCustomer} title='AddCustomer' panHandlers={null} />
             <Scene key='AddKredit' component={AddKredit} title='AddKredit' panHandlers={null} />
+            <Scene key='DetailKredit' component={DetailKredit} title='DetailKredit' panHandlers={null} />
           </Scene>
         </Router>
       )
