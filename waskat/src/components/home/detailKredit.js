@@ -62,13 +62,15 @@ export default class DetailKredit extends Component {
             <Text>Customer  : {_customerId.nama}</Text>
             <Text>Pinjaman: Rp. {pinjaman}</Text>
             <Text>Barang: </Text>
+            <View style={{width: '100%', flexDirection: 'row', flexWrap: 'wrap'}}>
             {
                 _barangId.map((barang, idx) => {
                     return (
-                        <Image source={{uri: barang.foto}} style={{ borderRadius: 25, flex: 1, flexDirection: 'column', height: 100, width: 100, resizeMode: 'contain'}}></Image>
+                        <Image source={{uri: barang.foto}} style={{ margin: 20, borderRadius: 25, width: '48%', margin: '1%', aspectRatio: 1}}></Image>
                     )
                 })
             }
+            </View>
           </View>
     
         </View>

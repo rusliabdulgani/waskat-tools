@@ -283,8 +283,10 @@ export default class AddKredit extends Component {
             </TouchableOpacity>
             {
               this.state.images.map((image, idx) => {
-                <Image style={{flex:0.3, width: 10, height: 10}}
-                source={{uri: "https://storage.googleapis.com/asia.artifacts.waskat-tools.appspot.com/barang-953147.jpg"}} idx={{idx}} />
+                return (
+                  <Image style={{flex:0.3, width: 10, height: 10}}
+                  source={{uri: "https://storage.googleapis.com/asia.artifacts.waskat-tools.appspot.com/barang-953147.jpg"}} idx={{idx}} />
+                )
               })
             }
         </ScrollView>

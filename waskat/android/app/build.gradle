@@ -108,6 +108,15 @@ android {
         }
         vectorDrawables.useSupportLibrary = true
     }
+    signingConfigs {
+        release {
+            if (project.hasProperty('my-release-key.keystore')) {
+                storeFile file('my-release-key.keystore')
+                storePassword "bl00mf13ld"
+                keyAlias 'waskat'
+                keyPassword 'bl00mf13ld'
+            }
+        }
     splits {
         abi {
             reset()
@@ -120,6 +129,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
@@ -149,4 +159,5 @@ dependencies {
 task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
+}
 }
