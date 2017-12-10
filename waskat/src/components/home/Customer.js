@@ -103,7 +103,7 @@ export default class Customer extends Component {
         </View>
         : 
         <FlatList 
-        style={{marginBottom: 60}}
+        style={{marginBottom: 70}}
         data={this.state.dataCustomer}
         keyExtractor={(item, id)=> item}
         renderItem={this._renderItem}/>
@@ -207,7 +207,6 @@ const styles = StyleSheet.create({
         marginRight: 15
       },
       buttonContainer: {
-        marginTop: 20,
         width: width,
         height: height * 0.08,
         backgroundColor: '#0D6129',

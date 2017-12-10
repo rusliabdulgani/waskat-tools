@@ -15,10 +15,6 @@ export default class CardBarang extends React.PureComponent {
     }
   }
 
-  componentWillReceiveProps () {
-    this.props
-  }
-
   _deleteUser (id) {
     AsyncStorage.getItem('headers')
     .then(result => {

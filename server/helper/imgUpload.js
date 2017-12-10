@@ -14,7 +14,6 @@ function getPublicUrl (filename) {
 }
 
 let imgUpload = {}
-var sizeOf = require('image-size')
 
 
 
@@ -26,7 +25,7 @@ imgUpload.uploadSingle = (req, res, next) => {
       result: ''
     })
   } else {
-    const gcsname = generateId()
+    const gcsname = req.file.originalname
     req.filePhoto = getPublicUrl(gcsname)
 
     const file = bucket.file(gcsname)
@@ -37,13 +36,9 @@ imgUpload.uploadSingle = (req, res, next) => {
     })
 
     stream.on('error', (err) => {
-      req.file.cloudStorageError = err
-      res.status(500).json({
-        status: false,
-        message: 'An error has occured, please try again',
-        result: ''
-      })
-    })
+      req.file.cloudStorageError = err;
+      next(err);
+    });
 
     stream.on('finish', () => {
       req.file.cloudStorageObject = gcsname

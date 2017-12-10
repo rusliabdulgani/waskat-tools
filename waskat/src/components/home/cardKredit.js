@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Dimensions, Text, View, Image, TouchableOpacity, AsyncStorage, Alert } from 'react-native'
 import FitImage from 'react-native-fit-image'
+import {Actions} from 'react-native-router-flux'
 import axios from 'axios'
 import {allLogo} from '../../assets'
 
@@ -8,15 +9,11 @@ import {headerDeleteUser} from '../../helper/header'
 import {URL_DELETE_USER} from '../../api'
 export default class CardKredit extends React.PureComponent {
 
-  constructor () {
-    super ()
+  constructor (props) {
+    super (props)
     this.state = {
       header: {}
     }
-  }
-
-  componentWillReceiveProps () {
-    this.props
   }
 
   _deleteUser (id) {
@@ -40,24 +37,30 @@ export default class CardKredit extends React.PureComponent {
     render () {
       const { 
         noKredit,
+        _id,
         _customerId,
         pinjaman
       } = this.props.data
 
-      console.log('ini props' , this.props.data)
+      console.log('ini props' , this.props)
       return (
   
         <View style={styles.cards}>
           <View style={styles.cardContent}>
             <View style={styles.titleContainer}>
               <View><Text style={styles.titleKeluhan}>No Kredit: {noKredit}</Text>
-                <Text style={styles.dateKeluhan}>Nama Peminjam: {_customerId.nama}</Text>
+                {
+                  _customerId ?
+                  <Text style={styles.dateKeluhan}>Nama Peminjam: {_customerId.nama}</Text>
+                  :
+                  <Text style={styles.dateKeluhan}>Nama Peminjam: - </Text>
+                }
                 <Text style={styles.dateKeluhan}>Jumlah Pinjaman: Rp. {pinjaman}</Text>
                 <View style={styles.buttonAdmin}>
                 </View>
               </View>
             </View>
-              <TouchableOpacity style={styles.keluhanPreview} onPress={() => this._deleteUser(_id)}>
+              <TouchableOpacity style={styles.keluhanPreview} onPress={() => Actions.DetailKredit({type: 'replace', detailKredit:this.props.data})}>
                 <Text style={styles.textButtonHapus}>Detail Kredit</Text>
               </TouchableOpacity>
           </View>
@@ -132,7 +135,7 @@ export default class CardKredit extends React.PureComponent {
         width: 3
       },
       shadowColor: '#eeeeee',
-      marginTop: 5
+      marginTop: 10
     },
     imageContainer: {
       flex:1,
