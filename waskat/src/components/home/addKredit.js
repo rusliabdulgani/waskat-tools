@@ -30,7 +30,9 @@ export default class AddKredit extends Component {
         opacity: 1,
         images: [],
         _barangId: [],
-        _customerId: ''
+        _customerId: '',
+        noKredit: '',
+        pinjaman: 0
     }
   }
 
@@ -206,11 +208,13 @@ export default class AddKredit extends Component {
 
   _validation () {
     if (this.state.noKredit.length === 0) {
-      Alert.alert('Warning!','Kolom Nomor Kredit harus diisi')
-    } else if (this.state.pinjaman.length === 0 ) {
-      Alert.alert('Warning!','Kolom pinjaman harus diisi')
-    } else if (this.state.images.length === 0 ) {
-      Alert.alert('Warning!','Gambar harus diisi')
+        Alert.alert('Warning!','Kolom Nomor Kredit harus diisi')
+    } else if (this.state.pinjaman === 0) {
+        Alert.alert('Warning!','Kolom pinjaman harus diisi')
+    } else if (this.state.images.length === 0) {
+        Alert.alert('Warning!','Gambar harus diisi')
+    } else if (this.state._customerId.length === 0) {
+        Alert.alert('Warning!','Customer harus dipilih')
     } else {
       this._addKredit()
       Actions.Kredit({type: 'replace'})
@@ -219,7 +223,7 @@ export default class AddKredit extends Component {
 
 
   render () {
-    console.log('props redux', this.state.images, this.state._barangId)
+    console.log('props redux', this.state.images, this.state._customerId)
     return (
         <View style={[styles.viewImg, {opacity: this.state.opacity}]}>
          {/* header area */}
@@ -251,8 +255,8 @@ export default class AddKredit extends Component {
                 <View style={{width:width * 0.5, paddingRight: 1}}>
                     <Picker
                     selectedValue={this.state._customerId}
-                    prompt='pilih customer'
                     onValueChange={(itemValue, itemIndex) => this.setState({_customerId: itemValue})}>
+                    <Picker.Item label={`Pilih Customer..`} value={''} />
                     {
                         this.state.customers.map((cust, idx) => {
                             return (
@@ -281,14 +285,16 @@ export default class AddKredit extends Component {
                   <Text style={styles.buttonTambahBarang}>Barang Jaminan</Text>
                 }
             </TouchableOpacity>
+            <View style={{width: '100%', flexDirection: 'row', flexWrap: 'wrap'}}>
             {
               this.state.images.map((image, idx) => {
                 return (
-                  <Image style={{flex:0.3, width: 10, height: 10}}
-                  source={{uri: "https://storage.googleapis.com/asia.artifacts.waskat-tools.appspot.com/barang-953147.jpg"}} idx={{idx}} />
+                  <Image style={{margin: 20, borderRadius: 25, width: '30%', aspectRatio: 1}}
+                  source={{uri: image}} idx={{idx}} />
                 )
               })
             }
+            </View>
         </ScrollView>
         <View>
           <ActivityIndicator animating={this.state.animate} size='large' color='#0D6129'/>

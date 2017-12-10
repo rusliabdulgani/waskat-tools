@@ -49,7 +49,12 @@ export default class CardKredit extends React.PureComponent {
           <View style={styles.cardContent}>
             <View style={styles.titleContainer}>
               <View><Text style={styles.titleKeluhan}>No Kredit: {noKredit}</Text>
-                <Text style={styles.dateKeluhan}>Nama Peminjam: {_customerId.nama}</Text>
+                {
+                  _customerId ?
+                  <Text style={styles.dateKeluhan}>Nama Peminjam: {_customerId.nama}</Text>
+                  :
+                  <Text style={styles.dateKeluhan}>Nama Peminjam: - </Text>
+                }
                 <Text style={styles.dateKeluhan}>Jumlah Pinjaman: Rp. {pinjaman}</Text>
                 <View style={styles.buttonAdmin}>
                 </View>
