@@ -136,7 +136,7 @@ export default class Kredit extends Component {
         </View>
         : 
         <FlatList 
-        style={{marginBottom: 60}}
+        style={{marginBottom: 80}}
         data={this.state.dataKredit}
         keyExtractor={(item, idx)=> idx}
         renderItem={this._renderItem}/>

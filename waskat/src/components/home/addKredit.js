@@ -221,6 +221,7 @@ export default class AddKredit extends Component {
         })
         .catch(err => {
           console.log('error nya',err)
+          Alert.alert('Error','Internal Server Error')
         })
     })
     .catch(error => {
@@ -240,17 +241,15 @@ export default class AddKredit extends Component {
       axios(headerAddUser(url, this.state.headers, postData))
         .then((resultAxios) => {
 
-          console.log('upload--------', resultAxios.data.result)
-          axios(headerAddUser(URL_POST_BARANG, this.state.headers, {foto: resultAxios.data.result, keterangan: 'text'}))
-          .then(resultAxios2 => {
-            console.log('ini input barang', resultAxios2.data._id  )
-            this.setState({_barangId: [...this.state._barangId, resultAxios2.data._id]})
+          this.setState({
+            gambar: resultAxios.data.result
           })
-          .catch(err => {
-            console.log(err)
-          })
-          this.setState({images: [...this.state.images, resultAxios.data.result]})
-          this.setState(previousState => { return {spinnerVisible: false, showModalCamera: false, opacity: 1} })
+          if (this.state.gambar.length !== 0) {
+            this._openModalInputBarang() 
+          }
+        })
+        .catch(err => {
+          Alert.alert('Error','Internal Server Error')
         })
     })
     .catch(error => {
@@ -376,6 +375,7 @@ export default class AddKredit extends Component {
             </View>
           </View>
         </Modal>
+        
         <ModalInputBarang
         inputBarang={this._inputBarang}
         onChangeInputKeterangan={this._onChangeInputKeterangan}
