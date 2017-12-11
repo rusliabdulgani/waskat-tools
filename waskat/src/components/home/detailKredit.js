@@ -6,6 +6,9 @@ import {OptimizedFlatList} from 'react-native-optimized-flatlist'
 import axios from 'axios'
 
 import { allLogo } from '../../assets'
+import {URL_GET_KREDIT } from '../../api'
+import {headerDeleteUser} from '../../helper/header'
+import units from '../../helper/viewPort'
 
 let {width, height} = Dimensions.get('window')
 export default class DetailKredit extends Component {
@@ -17,7 +20,9 @@ export default class DetailKredit extends Component {
         alamat: '',
         email: '',
         headers: {},
-        animate: false
+        animate: false,
+        showModal: false,
+        opacity: 1
     }
   }
 
@@ -38,12 +43,30 @@ export default class DetailKredit extends Component {
     return true
   }
 
+  _deleteKredit (id) {
+      AsyncStorage.getItem('headers')
+      .then( result => {
+          this.setState({
+              headers: JSON.parse(result)
+          })
+      })
+      .then(() => {
+        axios(headerDeleteUser(`${URL_GET_KREDIT}${id}`, this.state.headers))
+        .then( resultAxios => {
+          Alert.alert('Sukses!', `Berhasil delete kredit dengan no Kredit: ${this.props.detailKredit.noKredit}` )
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      })
+  }
+
 
   render () {
     console.log('props', this.props.detailKredit._barangId.foto)
     let {noKredit, _customerId, _barangId, pinjaman} = this.props.detailKredit
     return (
-        <View style={styles.viewImg}>
+        <View style={[styles.viewImg, {opacity: this.state.opacity}]}>
          {/* header area */}
          <View style={styles.header}>
          <View style={styles.headerLeft}>
@@ -65,8 +88,12 @@ export default class DetailKredit extends Component {
             <View style={{width: '100%', flexDirection: 'row', flexWrap: 'wrap'}}>
             {
                 _barangId.map((barang, idx) => {
+                  console.log(typeof(barang.foto))
                     return (
+                        <View>
                         <Image source={{uri: barang.foto}} style={{ margin: 20, borderRadius: 25, width: '48%', margin: '1%', aspectRatio: 1}}></Image>
+                        <Text>{barang.keterangan}</Text>
+                        </View>
                     )
                 })
             }
@@ -79,9 +106,38 @@ export default class DetailKredit extends Component {
         </View>
         <View style={{alignItems: 'center'}}>
         </View>
-        <TouchableOpacity style={styles.buttonContainer} onPress={() => { this._validation() }}>
+        <TouchableOpacity style={styles.buttonContainer} onPress={() => {  this.setState({showModal: true, opacity: 0.3})}}>
           <Text style={styles.buttonText}>H A P U S</Text>
         </TouchableOpacity>
+
+        <Modal animationType={'fade'} visible={this.state.showModal} onRequestClose={() => console.log('close')} transparent>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalBox}>
+            <View style={styles.topBoxModal}>
+              <Text style={styles.titleText}>Hapus</Text>
+              <Text style={styles.contentText}>Apakah Anda yakin untuk menghapus </Text>
+              <Text style={styles.contentText}>kredit dengan No Kredit {this.props.detailKredit.noKredit}?</Text>
+            </View>
+
+            <View style={styles.bottomBoxModal}>
+              <TouchableOpacity style={styles.leftBoxModal} onPress={() => this.setState({showModal: false})}>
+                <Text style={styles.optionTextModal}>Tidak</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.rightBoxModal} onPress={() => {
+                this._deleteKredit(this.props.detailKredit._id)
+                this.setState({
+                  showModal: false,
+                  opacity: 1
+                })
+                Actions.Kredit({type: 'replace'})
+              }}>
+                <Text style={styles.optionTextModal}>Ya</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       </View>
     )
   }
@@ -204,5 +260,54 @@ const styles = StyleSheet.create({
         //width: 244,
         height: 1,
         backgroundColor: '#BDBDBD'
+      },
+      contentText: {
+        fontFamily: 'BrandonText-Regular',
+        fontSize: 4 * units.vw
+      },
+      titleText: {
+        fontFamily: 'BrandonText-Medium',
+        fontSize: 4.5 * units.vw,
+        marginBottom: 3 * units.vw
+      },
+      optionTextModal: {
+        color: 'green',
+        fontFamily: 'BrandonText-Bold'
+      },
+      leftBoxModal: {
+        flex: 1,
+        borderRightWidth: 1,
+        borderColor: '#dedede',
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      rightBoxModal: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      topBoxModal: {
+        flex: 2,
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      bottomBoxModal: {
+        flex: 1,
+        flexDirection: 'row',
+        borderTopWidth: 1,
+        borderColor: '#dedede'
+      },
+      modalContainer: {
+        flex: 1,
+        width: '100%',
+        // backgroundColor: 'red',
+        justifyContent: 'center',
+        alignItems: 'center'
+      },
+      modalBox: {
+        width: 70 * units.vw,
+        height: 40 * units.vw,
+        backgroundColor: 'white',
+        borderRadius: 3 * units.vw
       }
 })

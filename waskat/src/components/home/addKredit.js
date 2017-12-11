@@ -12,6 +12,7 @@ import { allLogo } from '../../assets'
 import {headerAddUser, headerGetDataBarang} from '../../helper/header'
 import {URL_GET_KREDIT, URL_GET_DATA_CUSTOMER, URL_POST_BARANG} from '../../api'
 import { FotoKreditThunk } from '../../thunk/kreditThunk';
+import ModalInputBarang from './modalInputBarang'
 
 let {width, height} = Dimensions.get('window')
 
@@ -32,8 +33,14 @@ export default class AddKredit extends Component {
         _barangId: [],
         _customerId: '',
         noKredit: '',
-        pinjaman: 0
+        pinjaman: 0,
+        gambar: '',
+        showModal: false,
+        keterangan: ''
     }
+    this._inputBarang = this._inputBarang.bind(this)
+    this._onChangeInputKeterangan = this._onChangeInputKeterangan.bind(this)
+    this._openModalInputBarang = this._openModalInputBarang.bind(this)
   }
 
   componentDidMount () {
@@ -47,6 +54,11 @@ export default class AddKredit extends Component {
 
   componentWillUnmount () {
     BackHandler.removeEventListener('hardwareBackPress', () => this.backAndroid())
+  }
+
+  shouldComponentUpdate(nextState) {
+    const difImages = this.state.images !== nextState.images
+    return difImages
   }
 
   backAndroid () {
@@ -81,6 +93,20 @@ export default class AddKredit extends Component {
 
   _onChangeEmail (event) {
     this.setState({email: event.nativeEvent.text})
+  }
+
+  _onChangeInputKeterangan (event) {
+    this.setState({keterangan: event.nativeEvent.text})
+  }
+
+  _changeOpacity () {
+    this.state.opacity === 1 ? this.setState({opacity: 0.3}) : this.setState({opacity: 1})
+  }
+
+  _openModalInputBarang () {
+    this._changeOpacity()
+    this.state.showModal === false ? this.setState({showModal: true}) : this.setState({showModal: false})
+    
   }
 
   _getCustomer() {
@@ -145,7 +171,36 @@ export default class AddKredit extends Component {
     })
   }
 
+  _inputBarang (gambar, keterangan) {
+    AsyncStorage.getItem('headers')
+    .then(result => {
+      this.setState({
+        headers: JSON.parse(result)
+      })
+    })
+    .then(() => {
+      console.log('headers', this.state.headers)
+      axios(headerAddUser(URL_POST_BARANG, this.state.headers, {foto: this.state.gambar, keterangan: this.state.keterangan}))
+      .then(resultAxios => {
+        console.log('data customer', resultAxios)
+        this.setState({_barangId: [...this.state._barangId, resultAxios.data._id], images: [...this.state.images, resultAxios.data.result]})
+        Alert.alert('Sukses!','Berhasil input gambar')
+        this._openModalInputBarang()
+      })
+      .catch(err => {
+        this.setState({
+          animate: false
+        })
+          Alert.alert('Error!','Internal Server Error')
+          console.log('errornya', err)
+      })
+    })
+  }
+
+
+
   _uploadPictureCamera () {
+
     this.setState(previousState => { return {spinnerVisible: false, showModalCamera: false, opacity: 1} })
     Crop.default.openCamera({width: 400, height: 400, cropping: true})
     .then(image => {
@@ -156,16 +211,13 @@ export default class AddKredit extends Component {
       postData.append('file', { uri: image.path, type: 'image/jpg', name: `barang-${RandomNumber}.jpg` })
       axios(headerAddUser(url, this.state.headers, postData))
         .then((resultAxios) => {
-          console.log('upload------------', resultAxios.data, image.path)
-          axios(headerAddUser(URL_POST_BARANG, this.state.headers, {foto: resultAxios.data.result, keterangan: 'text'}))
-          .then(resultAxios2 => {
-            this.setState({_barangId: [...this.state._barangId, resultAxios2.data._id]})
+          this.setState({
+            gambar: resultAxios.data.result
           })
-          .catch(err => {
-            console.log(err)
-          })
-          this.setState({images: [...this.state.images, resultAxios.data.result]})
-          this.setState(previousState => { return {spinnerVisible: false, showModalCamera: false, opacity: 1} })
+          if (this.state.gambar.length !== 0) {
+            this._openModalInputBarang() 
+          }
+    
         })
         .catch(err => {
           console.log('error nya',err)
@@ -187,6 +239,7 @@ export default class AddKredit extends Component {
       postData.append('file', { uri: image.path, type: 'image/jpg', name: `barang-${RandomNumber}.jpg` })
       axios(headerAddUser(url, this.state.headers, postData))
         .then((resultAxios) => {
+
           console.log('upload--------', resultAxios.data.result)
           axios(headerAddUser(URL_POST_BARANG, this.state.headers, {foto: resultAxios.data.result, keterangan: 'text'}))
           .then(resultAxios2 => {
@@ -223,7 +276,9 @@ export default class AddKredit extends Component {
 
 
   render () {
-    console.log('props redux', this.state.images, this.state._customerId)
+    console.log('state keterangan', this.state.keterangan)
+    let link = this.state.images
+
     return (
         <View style={[styles.viewImg, {opacity: this.state.opacity}]}>
          {/* header area */}
@@ -260,7 +315,7 @@ export default class AddKredit extends Component {
                     {
                         this.state.customers.map((cust, idx) => {
                             return (
-                                <Picker.Item label={`${idx+1}. ${cust.nama}`} value={cust._id} />
+                                <Picker.Item label={`${idx+1}. ${cust.nama}`} value={cust._id} key={idx}/>
                             )
                         })
                     }
@@ -285,16 +340,6 @@ export default class AddKredit extends Component {
                   <Text style={styles.buttonTambahBarang}>Barang Jaminan</Text>
                 }
             </TouchableOpacity>
-            <View style={{width: '100%', flexDirection: 'row', flexWrap: 'wrap'}}>
-            {
-              this.state.images.map((image, idx) => {
-                return (
-                  <Image style={{margin: 20, borderRadius: 25, width: '30%', aspectRatio: 1}}
-                  source={{uri: image}} idx={{idx}} />
-                )
-              })
-            }
-            </View>
         </ScrollView>
         <View>
           <ActivityIndicator animating={this.state.animate} size='large' color='#0D6129'/>
@@ -306,7 +351,7 @@ export default class AddKredit extends Component {
         </TouchableOpacity>
 
         {/* MODAL FOR PICK IMAGE */}
-        <Modal animationType={'slide'} style={{borderRadius: 10}} transparent visible={this.state.showModalCamera} backgroundColor='transparent' onRequestClose={() => console.log('close')}>
+        <Modal animationType={'slide'} transparent visible={this.state.showModalCamera} backgroundColor='transparent' onRequestClose={() => console.log('close')}>
           <View style={styles.modalKeluhanContainer}>
             <View style={styles.modalKeluhanContentContainer}>
               <View style={styles.modalKeluhanTitle}>
@@ -331,6 +376,13 @@ export default class AddKredit extends Component {
             </View>
           </View>
         </Modal>
+        <ModalInputBarang
+        inputBarang={this._inputBarang}
+        onChangeInputKeterangan={this._onChangeInputKeterangan}
+        gambar={this.state.gambar}
+        openModal={this._openModalInputBarang}
+        visibleModal={this.state.showModal}
+        />
       </View>
     )
   }
@@ -387,7 +439,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 20
+        padding: 20,
+        borderRadius: 20
       },
       textButtonHapus: {
         fontFamily: 'BrandonText-Light',
@@ -445,6 +498,15 @@ const styles = StyleSheet.create({
         flex: 1,
         width: 'auto',
         height: 40,
+        borderColor: '#BDBDBD',
+        borderBottomWidth: 1,
+        fontSize: 14,
+        fontFamily: 'BrandonText-Regular'
+      },
+      textArea: {
+        flex: 1,
+        width: 'auto',
+        height: 200,
         borderColor: '#BDBDBD',
         borderBottomWidth: 1,
         fontSize: 14,
