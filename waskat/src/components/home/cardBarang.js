@@ -29,11 +29,7 @@ export default class CardBarang extends React.PureComponent {
         console.log('hasil delete', resultAxios)
         Alert.alert(
           'Sukses!',
-          `Berhasil delete user id: ${idUser}`,
-        [
-          {text: 'OK', onPress: () => this.props.getUser()}
-        ],
-        {cancelable: false})
+          `Berhasil delete user id: ${idUser}`)
       })
       .catch(err => {
         console.log('error delete user', err)
@@ -66,9 +62,11 @@ export default class CardBarang extends React.PureComponent {
                 </View>
               </View>
             </View>
+            <View style={{flex: 0.5, paddingTop: 10}}>
               <TouchableOpacity style={styles.keluhanPreview} onPress={() => this._deleteUser(_id, id)}>
                 <Text style={styles.textButtonHapus}>Hapus</Text>
               </TouchableOpacity>
+            </View>
           </View>
           <TouchableOpacity>
           </TouchableOpacity>
@@ -128,7 +126,6 @@ export default class CardBarang extends React.PureComponent {
     },
     cards: {
       flex:1,
-      height: height * 0.22,
       width: width*0.95,
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -199,7 +196,6 @@ export default class CardBarang extends React.PureComponent {
     keluhanPreview: {
       padding: 5,
       marginRight: 10,
-      marginLeft: 5,
       width: width * 0.25,
       backgroundColor: 'green',
       borderRadius: 30,

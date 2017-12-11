@@ -57,9 +57,11 @@ export default class CardCustomer extends React.PureComponent {
                 </View>
               </View>
             </View>
+            <View style={{flex: 0.5, paddingTop: 10}}>
               <TouchableOpacity style={styles.keluhanPreview} onPress={() => this._deleteCustomer(_id)}>
                 <Text style={styles.textButtonHapus}>Hapus</Text>
               </TouchableOpacity>
+            </View>
           </View>
           <TouchableOpacity>
           </TouchableOpacity>
@@ -118,8 +120,7 @@ export default class CardCustomer extends React.PureComponent {
       alignItems: 'center'
     },
     cards: {
-      flex:1,
-      height: height * 0.20,
+      flex:2,
       width: width*0.95,
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -191,7 +192,6 @@ export default class CardCustomer extends React.PureComponent {
     keluhanPreview: {
       padding: 5,
       marginRight: 10,
-      marginLeft: 5,
       width: width * 0.25,
       backgroundColor: 'green',
       borderRadius: 30,

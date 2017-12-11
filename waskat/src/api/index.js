@@ -1,4 +1,4 @@
-let BASE_URL = 'https://waskat-tools.appspot.com'
+let BASE_URL = 'https://i-cop-188711.appspot.com'
 
 export const URL_GET_DATA_USER = BASE_URL + '/user'
 export const URL_GET_DATA_BARANG = BASE_URL + '/barang'

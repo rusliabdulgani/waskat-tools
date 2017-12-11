@@ -205,7 +205,7 @@ export default class AddKredit extends Component {
     Crop.default.openCamera({width: 400, height: 400, cropping: true})
     .then(image => {
       gambar = []
-      let url = 'https://waskat-tools.appspot.com/upload/single'
+      let url = 'https://i-cop-188711.appspot.com/upload/single'
       let RandomNumber = Math.floor(Math.random() * 10000000) + 1 ;
       const postData = new FormData()
       postData.append('file', { uri: image.path, type: 'image/jpg', name: `barang-${RandomNumber}.jpg` })
@@ -234,7 +234,7 @@ export default class AddKredit extends Component {
     this.setState(previousState => { return {spinnerVisible: true, showModalCamera: false, opacity: 1} })
     Crop.default.openPicker({width: 400, height: 400, cropping: true})
     .then(image => {
-      let url = 'https://waskat-tools.appspot.com/upload/single'
+      let url = 'https://i-cop-188711.appspot.com/upload/single'
       const postData = new FormData()
       let RandomNumber = Math.floor(Math.random() * 10000000) + 1 ;
       postData.append('file', { uri: image.path, type: 'image/jpg', name: `barang-${RandomNumber}.jpg` })
