@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, ActivityIndicator, Image, TouchableOpacity, StyleSheet, Picker, TextInput, Dimensions, Alert, Modal, AsyncStorage, BackHandler} from 'react-native'
+import { View, Text, ActivityIndicator, Image, TouchableOpacity, ScrollView, StyleSheet, Picker, TextInput, Dimensions, Alert, Modal, AsyncStorage, BackHandler} from 'react-native'
 import {Actions} from 'react-native-router-flux'
 import FitImage from 'react-native-fit-image'
 import {OptimizedFlatList} from 'react-native-optimized-flatlist'
@@ -78,8 +78,8 @@ export default class DetailKredit extends Component {
           <View style={styles.headerRight} />
         </View>
 
-        <View style={[styles.viewContent]}>
-          <View style={{flex: 0.8, alignItems: 'center', paddingTop: 20}}>
+        <ScrollView style={[styles.viewContent]}>
+          <View style={{flex: 0.8, alignItems: 'center', paddingTop: 20, paddingBottom: 40}}>
 
             <Text>No Kredit : {noKredit}</Text>
             <Text>Customer  : {_customerId.nama}</Text>
@@ -90,8 +90,8 @@ export default class DetailKredit extends Component {
                 _barangId.map((barang, idx) => {
                   console.log(typeof(barang.foto))
                     return (
-                        <View>
-                        <Image source={{uri: barang.foto}} style={{ margin: 20, borderRadius: 25, width: '48%', margin: '1%', aspectRatio: 1}}></Image>
+                        <View style={{margin: 30}} key={idx}>
+                        <Image source={{uri: barang.foto}} style={{ margin: '1%', borderRadius: 5, width: '100%', aspectRatio: 1}}></Image>
                         <Text>{barang.keterangan}</Text>
                         </View>
                     )
@@ -100,7 +100,7 @@ export default class DetailKredit extends Component {
             </View>
           </View>
     
-        </View>
+        </ScrollView>
         <View>
           <ActivityIndicator animating={this.state.animate} size='large' color='#0D6129'/>
         </View>
@@ -120,7 +120,7 @@ export default class DetailKredit extends Component {
             </View>
 
             <View style={styles.bottomBoxModal}>
-              <TouchableOpacity style={styles.leftBoxModal} onPress={() => this.setState({showModal: false})}>
+              <TouchableOpacity style={styles.leftBoxModal} onPress={() => this.setState({showModal: false, opacity: 1})}>
                 <Text style={styles.optionTextModal}>Tidak</Text>
               </TouchableOpacity>
 
