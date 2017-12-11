@@ -9,6 +9,7 @@ export default class ModalInputBarang extends React.PureComponent {
   render () {
     return (
       <Modal animationType={'fade'} visible={this.props.visibleModal} onRequestClose={() => console.log('close')} transparent>
+      <TouchableWithoutFeedback onPress={() => this.props.openModal()}>
           <View style={styles.modalContainer}>
             <View style={styles.modalBox}>
                 <View style={styles.topModalBox}>
@@ -34,6 +35,7 @@ export default class ModalInputBarang extends React.PureComponent {
                 </View>
             </View>
           </View>
+          </TouchableWithoutFeedback>
       </Modal>
     )
   }
