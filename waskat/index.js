@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import App from './src/App'
 import store from './src/store'
 
-export default class waskat extends Component {
+export default class ICOP extends Component {
     render () {
       return (
         <Provider store={store}>
@@ -15,4 +15,4 @@ export default class waskat extends Component {
     }
   }
 
-AppRegistry.registerComponent('waskat', () => waskat)
+AppRegistry.registerComponent('ICOP', () => ICOP)
