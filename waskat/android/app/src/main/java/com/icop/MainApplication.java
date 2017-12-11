@@ -1,4 +1,4 @@
-package com.waskat;
+package com.icop;
 
 import android.app.Application;
 

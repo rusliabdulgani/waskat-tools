@@ -98,7 +98,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "com.waskat"
+        applicationId "com.icop"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 2
