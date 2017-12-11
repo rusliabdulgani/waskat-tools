@@ -2,11 +2,11 @@ const storage = require('@google-cloud/storage')
 const generateId = require('../helper/idGen').generateId
 
 const gcs = storage({
-  projectId: 'waskat-tools',
-  keyFilename: './waskat-tools-8cfcb8792f1d.json'
+  projectId: 'i-cop-188711',
+  keyFilename: './I-COP-da21af5db96c.json'
 })
 
-const bucketName = 'asia.artifacts.waskat-tools.appspot.com'
+const bucketName = 'asia.artifacts.i-cop-188711.appspot.com'
 const bucket = gcs.bucket(bucketName)
 
 function getPublicUrl (filename) {
