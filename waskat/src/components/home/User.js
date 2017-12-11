@@ -19,6 +19,7 @@ export default class User extends Component {
         header: {},
         animate: false
     }
+    this._getAllUser = this._getAllUser.bind(this)
   }
 
   componentDidMount () {
@@ -28,6 +29,12 @@ export default class User extends Component {
 
   componentWillUnmount () {
     BackHandler.removeEventListener('hardwareBackPress', () => this.backAndroid())
+  }
+
+
+  shouldComponentUpdate(nextState) {
+    const dataUserUpdate = this.state.dataUser !== nextState.dataUser
+    return dataUserUpdate
   }
 
   backAndroid () {
@@ -80,7 +87,8 @@ export default class User extends Component {
         <CardBarang 
         data={item}
         id={item._id}
-        menu={'user'}/>
+        menu={'user'}
+        getUser={this._getAllUser}/>
       )
   }
 

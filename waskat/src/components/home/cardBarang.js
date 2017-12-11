@@ -8,14 +8,15 @@ import {headerDeleteUser} from '../../helper/header'
 import {URL_DELETE_USER} from '../../api'
 export default class CardBarang extends React.PureComponent {
 
-  constructor () {
-    super ()
+  constructor (props) {
+    super (props)
     this.state = {
-      header: {}
+      header: {},
+      id: ''
     }
   }
 
-  _deleteUser (id) {
+  _deleteUser (id, idUser) {
     AsyncStorage.getItem('headers')
     .then(result => {
       this.setState({
@@ -26,7 +27,13 @@ export default class CardBarang extends React.PureComponent {
       axios(headerDeleteUser(`${URL_DELETE_USER}${id}`, this.state.header ))
       .then(resultAxios => {
         console.log('hasil delete', resultAxios)
-        Alert.alert('Sukses!',`Berhasil delete user id: ${id}`)
+        Alert.alert(
+          'Sukses!',
+          `Berhasil delete user id: ${idUser}`,
+        [
+          {text: 'OK', onPress: () => this.props.getUser()}
+        ],
+        {cancelable: false})
       })
       .catch(err => {
         console.log('error delete user', err)
@@ -59,7 +66,7 @@ export default class CardBarang extends React.PureComponent {
                 </View>
               </View>
             </View>
-              <TouchableOpacity style={styles.keluhanPreview} onPress={() => this._deleteUser(_id)}>
+              <TouchableOpacity style={styles.keluhanPreview} onPress={() => this._deleteUser(_id, id)}>
                 <Text style={styles.textButtonHapus}>Hapus</Text>
               </TouchableOpacity>
           </View>

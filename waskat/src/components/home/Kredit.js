@@ -138,7 +138,7 @@ export default class Kredit extends Component {
         <FlatList 
         style={{marginBottom: 60}}
         data={this.state.dataKredit}
-        keyExtractor={(item, idx)=> item}
+        keyExtractor={(item, idx)=> idx}
         renderItem={this._renderItem}/>
         }
         <TouchableOpacity style={styles.buttonContainer} onPress={() => this._addKreditPage()}>
